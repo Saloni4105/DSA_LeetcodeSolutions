@@ -20,10 +20,12 @@ class Solution {
             return 0;
         }
 
+        // if left subtree is null
         if(root.left == null)
         {
             return 1+ minDepth(root.right);
         }
+        // if right subtree is null
 
         if(root.right == null)
         {
