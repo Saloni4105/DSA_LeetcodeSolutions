@@ -17,18 +17,18 @@ class Solution {
     public boolean isSameTree(TreeNode p, TreeNode q) {
         if(p == null && q== null)
         {
-            return true;
+            return true; //if both are null
         }
 
         if(p == null || q== null)
         {
-            return false;
+            return false; //if only one null
         }
         if(p.val != q.val)
         {
-            return false;
+            return false; // if values are not same
         }
 
-        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right); //left and right are recursively call
     }
 }
