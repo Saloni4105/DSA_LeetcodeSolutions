@@ -1,20 +1,17 @@
 class Solution {
     public boolean isBipartite(int[][] graph) {
-        int V= graph.length;
-       int color[] = new int[V];
+        int V = graph.length;
+        int color[] = new int[V];
 
-        // initialize color array
         for(int i=0; i<V; i++)
         {
             color[i] = -1;
         }
-
-         // check all components
         for(int i=0; i<V; i++)
         {
             if(color[i] == -1)
             {
-                if(!dfs(graph, i, color, 1))
+                if(!bfs(graph, i, color, 1))
                 {
                     return false;
                 }
@@ -23,25 +20,27 @@ class Solution {
         return true;
     }
 
-    // DFS
-    public boolean dfs(int[][] graph, int curr, int color[], int currColor)
+    public boolean bfs(int[][] graph, int curr, int color[], int currColor)
     {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(curr);
         color[curr] = currColor;
 
-        for(int v : graph[curr])
-        {   // if neighbor has same color → not bipartite
-            if(color[v] == color[curr])
+        while(!q.isEmpty())
+        {
+            int u = q.remove();
+
+            for(int v : graph[u])
             {
-                return false;
-            }
-            // if uncolored, assign opposite color
-            if(color[v] == -1)
-            {
-               int colorOfV = 1- currColor; 
-               if(!dfs(graph, v, color, colorOfV))
-               {
-                return false;
-               }
+                if(color[v] == color[u])
+                {
+                    return false;
+                }
+                if(color[v] == -1)
+                {
+                    color[v] = 1- color[u];
+                    q.add(v);
+                }
             }
         }
         return true;
