@@ -1,62 +1,86 @@
+import java.util.*;
+
 class Solution {
-
-    static class Pair implements Comparable<Pair>
-    {
-        int v; 
-        int cost;
-
-        public Pair(int v, int cost)
-        {
-            this.v = v;
-            this.cost = cost;
-        }
-
-        public int compareTo(Pair p2)
-        {
-            return this.cost - p2.cost;
+    
+    int[] parent;
+    int[] rank;
+    
+    // Find with path compression
+    int find(int x) {
+        if (x == parent[x])
+            return x;
+        return parent[x] = find(parent[x]);
+    }
+    
+    // Union by rank
+    void union(int x, int y) {
+        int xParent = find(x);
+        int yParent = find(y);
+        
+        if (xParent == yParent) 
+            return;
+        
+        if (rank[xParent] > rank[yParent]) {
+            parent[yParent] = xParent;
+        } else if (rank[xParent] < rank[yParent]) {
+            parent[xParent] = yParent;
+        } else {
+            parent[xParent] = yParent;
+            rank[yParent]++;
         }
     }
+    
+    // Kruskal’s algorithm
+    int kruskal(List<int[]> edges) {
+        int sum = 0;
+        
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            
+            int parentU = find(u);
+            int parentV = find(v);
+            
+            if (parentU != parentV) {
+                union(u, v);
+                sum += wt;
+            }
+        }
+        
+        return sum;
+    }
+    
+    // Main function
     public int minCostConnectPoints(int[][] points) {
-        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
         int V = points.length;
-        for(int i=0; i<V; i++)
-        {
-            adj.add(new ArrayList<>());
-        }
-
+        parent = new int[V];
+        rank = new int[V];
+        
         for (int i = 0; i < V; i++) {
-    for (int j = i + 1; j < V; j++) {
-        int wt = Math.abs(points[i][0] - points[j][0]) + Math.abs(points[i][1] - points[j][1]);
-        adj.get(i).add(new Pair(j, wt));
-        adj.get(j).add(new Pair(i, wt));
-    }
-}
-        return PrimsAlgo(adj, V);
-    }
-
-    public int PrimsAlgo(ArrayList<ArrayList<Pair>> adj, int V)
-    {
-        boolean vis[] = new boolean[V];
-        PriorityQueue<Pair> pq = new PriorityQueue<>();
-        pq.add(new Pair(0,0));
-        int finalCost = 0;
-
-        while(!pq.isEmpty())
-        {
-            Pair curr = pq.poll();
-            if(vis[curr.v]) continue;
-
-            vis[curr.v] = true;
-            finalCost += curr.cost;
-             
-             for(Pair neighbor : adj.get(curr.v))
-             {
-                if(!vis[neighbor.v])
-                {
-                    pq.add(new Pair(neighbor.v, neighbor.cost));
-                }
-             }
+            parent[i] = i;
+            rank[i] = 0;
         }
-        return finalCost;
+        
+        List<int[]> edges = new ArrayList<>();
+        
+        // Build all edges with their Manhattan distances
+        for (int i = 0; i < V; i++) {
+            for (int j = i + 1; j < V; j++) {
+                int x1 = points[i][0];
+                int y1 = points[i][1];
+                int x2 = points[j][0];
+                int y2 = points[j][1];
+                
+                int d = Math.abs(x1 - x2) + Math.abs(y1 - y2);
+                edges.add(new int[]{i, j, d});
+            }
+        }
+        
+        // Sort edges by weight (distance)
+        Collections.sort(edges, (a, b) -> a[2] - b[2]);
+        
+        // Apply Kruskal’s algorithm
+        return kruskal(edges);
     }
 }
