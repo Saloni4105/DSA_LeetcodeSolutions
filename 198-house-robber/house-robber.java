@@ -13,10 +13,14 @@ class Solution {
             return 0;
         }
 
+        // If already computed, return stored value
         if (t[i] != -1)
             return t[i];
-            
+
+        // Option 1: Rob current house and move to i+2
         int steal = nums[i] + solve(nums, i+2, n);
+
+        // Option 2: Skip current house and move to i+1
         int skip = solve(nums, i+1, n);
 
         return t[i] = Math.max(steal, skip);
