@@ -1,18 +1,21 @@
 class Solution {
 
     public int climbStairs(int n) {
-        if(n == 1 || n == 2)
+        if(n == 1 || n == 2 || n == 3)
             return n;
 
-        int t[] = new int[n+1];
-        t[0] = 0;
-        t[1] = 1;
-        t[2] = 2;
+        int a = 1;
+        int b = 2;
+        int c = 3;
 
         for(int i=3; i<= n; i++)
         {
-            t[i] = t[i-1] + t[i-2];
+            c = a + b; 
+
+            int temp_b = b;
+            b = c;
+            a = temp_b;
         }
-        return t[n];
+        return c;
     }
 }
