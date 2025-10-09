@@ -1,28 +1,25 @@
 class Solution {
-    int t[] = new int[101];
+    
     public int rob(int[] nums) {
         int n = nums.length;
-        Arrays.fill(t, -1);
-        return solve(nums, 0, n);
-    }
+       if(n == 1)
+            return nums[0];
 
-    int solve(int nums[], int i, int n)
-    {
-        if(i >= n)
-        {
-            return 0;
-        }
+            int t[] = new int[n+1]; // t[i] = max profit till house i
+            t[0] = 0;
+            t[1] = nums[0];
 
-        // If already computed, return stored value
-        if (t[i] != -1)
-            return t[i];
+            for(int i=2; i<= n; i++)
+            {
+                int skip = t[i-1];
+                int steal = nums[i-1] + t[i-2];
+                t[i] = Math.max(skip, steal);
 
-        // Option 1: Rob current house and move to i+2
-        int steal = nums[i] + solve(nums, i+2, n);
-
-        // Option 2: Skip current house and move to i+1
-        int skip = solve(nums, i+1, n);
-
-        return t[i] = Math.max(steal, skip);
+                /*
+                SKIP  : If we skip this house,  then profit till previous house = t[i-1]
+                STEAL : If we steal this house, then we can't take prev profit, we can take till (i-2)th house profit = t[i-2]
+            */
+            }
+        return t[n];
     }
 }
