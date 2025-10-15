@@ -1,40 +1,30 @@
 class Solution {
     public int[] findMissingAndRepeatedValues(int[][] grid) {
-        // using hashmap O(n^2) O(n^2)
+        // using Mathematical formula O(n^2) O(1)
+    int n = grid.length;
+    long N = (long) n*n;
 
-        int n= grid.length;
-        int N = n * n; //total elements
+    long gridSum = 0;
+    long gridSqSum = 0;
 
-        HashMap<Integer, Integer> map = new HashMap<>();
-
-        int a  = -1;
-        int b = -1;
-
-        for(int i=0; i<n; i++)
+    for(int i=0; i<n; i++)
+    {
+        for(int j=0; j<n; j++)
         {
-            for(int j=0; j<n; j++)
-            {
-                map.put(grid[i][j], map.getOrDefault(grid[i][j], 0) +1);
-            }
+            gridSum += grid[i][j];
+            gridSqSum += (long) grid[i][j] * grid[i][j];
         }
+    }
 
-        // [1...N]
-        for(int num = 1; num <= N; num++)
-        {
-            if(!map.containsKey(num))
-            {
-                b = num; //missing no.
-            }else if(map.get(num) == 2)
+    long sum = (N *(N+1)) / 2; //Expected sum of N natural numbers
+    long sqSum = (N *(N+1) * (2 *N+1)) / 6; //expected sq sum of natural numbers
 
-            {
-                a = num; //repeated element
-            }
+    long sqDiff = gridSqSum - sqSum;
+    long sumDiff = gridSum - sum;
 
-            if( a != -1 && b != -1)
-            {
-                break; // if not exist
-            }
-        }
-        return new int[]{a,b};
+    int a = (int)((sqDiff / sumDiff + sumDiff) / 2);
+    int b = (int)((sqDiff / sumDiff - sumDiff) / 2);
+
+    return new int[]{a, b};
     }
 }
