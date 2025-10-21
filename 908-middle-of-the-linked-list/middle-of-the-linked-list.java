@@ -10,6 +10,7 @@
  */
 class Solution {
     public ListNode middleNode(ListNode head) {
+        // O(n) O(1)
        ListNode slow = head;
        ListNode fast = head;
 
