@@ -10,6 +10,7 @@
  */
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
+        
         if(head == null || head.next == null)
         {
             return head;
@@ -20,11 +21,11 @@ class Solution {
         {
             if(curr.val == curr.next.val)
             {
-                curr.next = curr.next.next; //if duplicate nodes find skip it
+                curr.next = curr.next.next;
             }
             else
             {
-                curr = curr.next; 
+                curr = curr.next;
             }
         }
         return head;
