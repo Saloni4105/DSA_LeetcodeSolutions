@@ -11,31 +11,20 @@
  */
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-
-        // hashMap approach time- O(n+m) Space -O(n)
+        //  Two pointer approach - Time - O(n+m) , Space -O(1)
         if(headA == null || headB == null)
         {
             return null;
         }
 
-        HashMap<ListNode, Integer> map = new HashMap<>();
+        ListNode pA = headA;
+        ListNode pB = headB;
 
-        ListNode temp = headA;
-        while(temp != null)
+        while(pA != pB) 
         {
-            map.put(temp, 1);
-            temp = temp.next;
+            pA = (pA == null) ? headB : pA.next;
+            pB = (pB == null) ? headA : pB.next;
         }
-
-        temp = headB;
-        while(temp != null)
-        {
-            if(map.containsKey(temp))
-            {
-                return temp;
-            }
-            temp = temp.next;
-        }
-        return null;
+        return pA; // either intersection point or null
     }
 }
