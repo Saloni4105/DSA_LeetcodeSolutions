@@ -41,7 +41,7 @@ class Solution {
         }
 
         prev.next.next = curr; //add with right list
-        prev.next = prevNode;
+        prev.next = prevNode; // add with left list
 
         return dummy.next;
     }
