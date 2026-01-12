@@ -15,52 +15,50 @@ class Node {
 
 class Solution {
     public Node copyRandomList(Node head) {
-        
-        // base case
+
+    //  base case
         if(head == null)
         {
             return null;
-        }
+        } 
 
-        Map<Node, Node> map = new HashMap<>();
+        Node curr = head;
 
-        Node curr = head;// traverse original list
-        Node newHead = null; //head of copied list
-        Node prev = null; //previous nodw in copied list
-
-        // copy all nodes and next pointer
+        // Insert copy node b/w orginal list
         while(curr != null)
         {
-            Node copy = new Node(curr.val);
-            map.put(curr, copy);
-
-            if(newHead == null)
-            {
-                newHead = copy;
-                prev= copy;
-            }
-            else{
-                prev.next = copy;
-                prev = copy;
-            }
-
-            curr = curr.next;
+            Node nextNode = curr.next;//next of original node
+            Node copy = new Node(curr.val); //new node
+            curr.next = copy;
+            copy.next = nextNode;
+            curr = nextNode; //move to next original node
         }
 
-        // copy random pointer
+        // assign random pointer to copy node
+
         curr = head;
+        while(curr != null)
+        {
+            if(curr.random != null)
+            {
+                curr.next.random = curr.random.next;
+            }
+            curr = curr.next.next;
+        }
+
+        //  seperate original and copied list
+        curr = head;
+        Node newHead = head.next;
         Node newCurr = newHead;
 
         while(curr != null)
         {
-            if(curr.random == null)
+            curr.next = curr.next.next;
+
+            if(newCurr.next != null)
             {
-                newCurr.random = null;
-            }
-            else
-            {
-                newCurr.random = map.get(curr.random);
-            }
+                newCurr.next = newCurr.next.next;
+            }   
             curr = curr.next;
             newCurr = newCurr.next;
         }
