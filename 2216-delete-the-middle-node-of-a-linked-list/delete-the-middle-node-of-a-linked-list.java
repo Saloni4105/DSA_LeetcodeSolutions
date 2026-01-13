@@ -15,6 +15,7 @@ class Solution {
         {
             return null;
         }
+
         ListNode slow = head;
         ListNode fast = head;
         ListNode prev = null;
