@@ -1,17 +1,19 @@
 class Solution {
     public void reverseString(char[] s) {
-        StringBuilder sb = new StringBuilder();
+        recursion(s, 0, s.length-1);
+    }
 
-        // append char from end to start
-        for(int i=s.length-1; i>=0; i--)
+    public void recursion(char s[], int start, int end)
+    {
+        if(start >= end)
         {
-            sb.append(s[i]);
+            return;
         }
 
-        // copy back to orginal array
-        for(int i=0; i<s.length; i++)
-        {
-            s[i] = sb.charAt(i);
-        }
+        char temp = s[start];
+        s[start] = s[end];
+        s[end] = temp;
+
+        recursion(s, start+1, end-1);
     }
 }
